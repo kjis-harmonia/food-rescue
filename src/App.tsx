@@ -3,6 +3,7 @@ import { AdminLayout } from './components/layout/AdminLayout'
 import { StoreLayout } from './components/layout/StoreLayout'
 import { UserLayout } from './components/layout/UserLayout'
 import { ToastStack } from './components/ui/ToastStack'
+import { NotFound } from './pages/NotFound'
 import { AdminHome } from './pages/admin/AdminHome'
 import { AdminOrders } from './pages/admin/AdminOrders'
 import { AdminProducts } from './pages/admin/AdminProducts'
@@ -12,7 +13,9 @@ import { StoreHome } from './pages/store/StoreHome'
 import { StoreProducts } from './pages/store/StoreProducts'
 import { StoreReservations } from './pages/store/StoreReservations'
 import { StoreSettings } from './pages/store/StoreSettings'
+import { FavoriteStoresPage } from './pages/user/FavoriteStoresPage'
 import { Home } from './pages/user/Home'
+import { HistoryPage } from './pages/user/HistoryPage'
 import { MyBag } from './pages/user/MyBag'
 import { MyPage } from './pages/user/MyPage'
 import { ProductDetail } from './pages/user/ProductDetail'
@@ -31,6 +34,8 @@ function App() {
           <Route path="/tickets/:reservationId" element={<TicketPage />} />
           <Route path="/bag" element={<MyBag />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/favorites" element={<FavoriteStoresPage />} />
         </Route>
 
         <Route path="/store" element={<StoreLayout />}>
@@ -48,6 +53,8 @@ function App() {
           <Route path="products" element={<AdminProducts />} />
           <Route path="orders" element={<AdminOrders />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )

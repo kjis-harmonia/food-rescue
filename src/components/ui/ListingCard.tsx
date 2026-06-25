@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
-import { formatDistance, formatYen } from '../../lib/format'
+import { formatCountdown, formatDistance, formatYen, minutesUntilTime } from '../../lib/format'
 import type { Product } from '../../lib/types'
 
 export function ListingCard({ product }: { product: Product }) {
@@ -9,6 +9,7 @@ export function ListingCard({ product }: { product: Product }) {
   const isSoldOut = product.status !== 'active' || product.quantityLeft <= 0
   const savings = product.normalPrice - product.rescuePrice
   const displayTitle = product.surpriseBag ? `${store?.name ?? ''}のお楽しみレスキューバッグ` : product.title
+  const countdownLabel = formatCountdown(minutesUntilTime(product.pickupEnd))
 
   return (
     <Link to={`/products/${product.id}`} className="block w-full cursor-pointer transition hover:opacity-95">
@@ -29,9 +30,14 @@ export function ListingCard({ product }: { product: Product }) {
             </span>
           </span>
         ) : (
-          <span className="absolute left-2 top-2 rounded-full bg-neutral-900/80 px-2 py-1 text-[10px] font-black text-white backdrop-blur-sm">
-            残り{product.quantityLeft}個
-          </span>
+          <>
+            <span className="absolute left-2 top-2 rounded-full bg-neutral-900/80 px-2 py-1 text-[10px] font-black text-white backdrop-blur-sm">
+              残り{product.quantityLeft}個
+            </span>
+            <span className="absolute right-2 top-2 rounded-full bg-red-600/90 px-2 py-1 text-[10px] font-black text-white backdrop-blur-sm">
+              ⏰ {countdownLabel}
+            </span>
+          </>
         )}
       </div>
 

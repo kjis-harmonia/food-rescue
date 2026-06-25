@@ -1,17 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useData } from '../../context/DataContext'
-import { formatDistance, formatYen } from '../../lib/format'
+import { formatCountdown, formatDistance, formatYen, minutesUntilTime } from '../../lib/format'
 import type { Product } from '../../lib/types'
-
-function minutesUntil(pickupEnd: string) {
-  const [hours, minutes] = pickupEnd.split(':').map(Number)
-  const end = new Date()
-  end.setHours(hours, minutes, 0, 0)
-  const now = new Date()
-  let diff = Math.round((end.getTime() - now.getTime()) / 60000)
-  if (diff < 0) diff += 24 * 60
-  return diff
-}
 
 export function FeaturedListingCard({ product }: { product: Product }) {
   const { getStoreById } = useData()
@@ -19,8 +9,7 @@ export function FeaturedListingCard({ product }: { product: Product }) {
   const savings = product.normalPrice - product.rescuePrice
   const displayTitle = product.surpriseBag ? `${store?.name ?? ''}のお楽しみレスキューバッグ` : product.title
 
-  const minutesLeft = minutesUntil(product.pickupEnd)
-  const countdownLabel = minutesLeft <= 0 ? 'まもなく終了' : minutesLeft < 60 ? `あと${minutesLeft}分` : `あと${Math.round(minutesLeft / 60)}時間`
+  const countdownLabel = formatCountdown(minutesUntilTime(product.pickupEnd))
 
   return (
     <Link

@@ -4,6 +4,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CheckoutModal } from '../../components/ui/CheckoutModal'
 import { useData } from '../../context/DataContext'
 import { formatDistance, formatYen } from '../../lib/format'
+import type { PaymentMethod } from '../../lib/types'
 
 function HeartIcon({ active }: { active: boolean }) {
   return (
@@ -75,6 +76,15 @@ function CancelIcon() {
   )
 }
 
+function MapPinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" />
+      <circle cx="12" cy="9.5" r="2.2" />
+    </svg>
+  )
+}
+
 function QrTinyIcon() {
   return (
     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.7">
@@ -110,10 +120,13 @@ export function ProductDetail() {
   const maxQuantity = Math.min(product.quantityLeft, 5)
   const savings = product.normalPrice - product.rescuePrice
   const displayTitle = product.surpriseBag ? `${store?.name ?? ''}のお楽しみレスキューバッグ` : product.title
+  const mapsHref = store?.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.address)}`
+    : undefined
 
-  const handlePaymentSuccess = (paymentIntentId: string) => {
+  const handlePaymentSuccess = (paymentIntentId: string, method: PaymentMethod) => {
     setIsCheckoutOpen(false)
-    const reservation = createReservation(product.id, quantity, paymentIntentId)
+    const reservation = createReservation(product.id, quantity, paymentIntentId, method)
     navigate(`/tickets/${reservation.id}`, { replace: true })
   }
 
@@ -238,6 +251,32 @@ export function ProductDetail() {
             </div>
           ))}
         </div>
+
+        {store && (
+          <div className="mt-6 rounded-2xl border border-neutral-100 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-neutral-400">お店について</p>
+            <p className="mt-1.5 text-sm font-bold tracking-tight text-neutral-900">{store.name}</p>
+            <p className="mt-1 text-sm leading-relaxed text-neutral-500">{store.description}</p>
+
+            {mapsHref && (
+              <a
+                href={mapsHref}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 flex items-center gap-3 rounded-2xl bg-neutral-50 p-3.5 text-left transition-all duration-200 active:scale-[0.98]"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#0D4436] text-white">
+                  <MapPinIcon />
+                </span>
+                <span className="flex-1">
+                  <span className="block text-xs font-bold tracking-tighter text-neutral-800">店舗までのルート</span>
+                  <span className="block text-[11px] text-neutral-400">{store.address}</span>
+                </span>
+                <span className="text-xs font-bold text-[#0D4436]">経路 ＞</span>
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 z-40 mx-auto flex h-[72px] max-w-[480px] items-center border-t border-neutral-100 bg-white/80 px-5 backdrop-blur-md [padding-bottom:env(safe-area-inset-bottom)]">

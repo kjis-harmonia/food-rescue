@@ -22,7 +22,15 @@ import {
   type ProductRow,
   type StoreRow,
 } from '../lib/supabaseApi'
-import type { AppNotification, NotificationAudience, NotificationType, Product, Reservation, StoreInfo } from '../lib/types'
+import type {
+  AppNotification,
+  NotificationAudience,
+  NotificationType,
+  PaymentMethod,
+  Product,
+  Reservation,
+  StoreInfo,
+} from '../lib/types'
 
 export type ScanResult =
   | { ok: true }
@@ -51,7 +59,12 @@ interface DataContextValue {
   getProductsByStore: (storeId: string) => Product[]
   toggleFavorite: (productId: string) => void
   isFavorite: (productId: string) => boolean
-  createReservation: (productId: string, quantity: number, stripePaymentId?: string) => Reservation
+  createReservation: (
+    productId: string,
+    quantity: number,
+    stripePaymentId?: string,
+    paymentMethod?: PaymentMethod,
+  ) => Reservation
   markPickedUp: (reservationId: string) => ScanResult
   cancelReservation: (reservationId: string) => void
   addProduct: (input: NewProductInput) => void
@@ -253,7 +266,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  const createReservation = (productId: string, quantity: number, stripePaymentId?: string) => {
+  const createReservation = (
+    productId: string,
+    quantity: number,
+    stripePaymentId?: string,
+    paymentMethod: PaymentMethod = 'credit_card',
+  ) => {
     const product = getProductById(productId)
     if (!product) {
       throw new Error('対象の商品が見つかりませんでした')
@@ -284,7 +302,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     )
 
     const amount = product.rescuePrice * quantity
-    void createOrderAndPay(reservation, amount, userIdRef.current, stripePaymentId).catch((error) =>
+    void createOrderAndPay(reservation, amount, userIdRef.current, stripePaymentId, paymentMethod).catch((error) =>
       console.warn('[supabase] 予約の保存に失敗しました（ローカルでは反映済み）', error),
     )
     void updateProductStatus(productId, nextStatus, nextQuantityLeft).catch((error) =>

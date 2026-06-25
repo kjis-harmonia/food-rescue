@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Product, ProductStatus, Reservation, ReservationStatus, StoreInfo } from './types'
+import type { PaymentMethod, Product, ProductStatus, Reservation, ReservationStatus, StoreInfo } from './types'
 
 // ───────────────────────────────────────────────────────────────────────────
 // The live Supabase project ships with a minimal baseline schema:
@@ -195,6 +195,7 @@ export async function createOrderAndPay(
   amount: number,
   userId: string | null,
   stripePaymentId?: string,
+  paymentMethod: PaymentMethod = 'credit_card',
 ) {
   const orderBase = {
     id: reservation.id,
@@ -205,6 +206,7 @@ export async function createOrderAndPay(
   }
   const paymentId = `payment-${reservation.id}`
   const ticketId = `ticket-${reservation.id}`
+  const genericMethod = paymentMethod === 'credit_card' ? 'card' : 'wallet'
 
   await Promise.all([
     insertWithFallback(
@@ -221,7 +223,15 @@ export async function createOrderAndPay(
     ),
     insertWithFallback(
       'payments',
-      { id: paymentId, order_id: reservation.id, amount, status: 'pending', method: 'card', currency: 'jpy' },
+      {
+        id: paymentId,
+        order_id: reservation.id,
+        amount,
+        status: 'pending',
+        method: genericMethod,
+        payment_method: paymentMethod,
+        currency: 'jpy',
+      },
       { id: paymentId, order_id: reservation.id, amount, status: 'pending' },
     ),
     insertWithFallback(

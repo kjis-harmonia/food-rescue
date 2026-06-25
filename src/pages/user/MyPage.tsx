@@ -1,9 +1,16 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import foodRescueLogo from '../../assets/food-rescue.png'
+import { AccountModal } from '../../components/ui/AccountModal'
+import { HelpModal } from '../../components/ui/HelpModal'
 import { NotificationPanel } from '../../components/ui/NotificationPanel'
+import { NotificationSettingsModal } from '../../components/ui/NotificationSettingsModal'
+import { PaymentMethodsModal } from '../../components/ui/PaymentMethodsModal'
 import { useData } from '../../context/DataContext'
 import { useUserGamification } from '../../hooks/useUserGamification'
 import { formatYen } from '../../lib/format'
+
+type SettingsKey = 'account' | 'payment' | 'notifications' | 'help'
 
 type IconProps = { className?: string }
 
@@ -67,11 +74,11 @@ const categoryDisplay: Record<string, string> = {
   grocery: '青果',
 }
 
-const settings = [
-  { label: 'アカウント情報', icon: UserIcon },
-  { label: 'お支払い方法', icon: CardIcon },
-  { label: '通知設定', icon: BellIcon },
-  { label: 'ヘルプ・お問い合わせ', icon: HelpIcon },
+const settings: { key: SettingsKey; label: string; icon: typeof UserIcon }[] = [
+  { key: 'account', label: 'アカウント情報', icon: UserIcon },
+  { key: 'payment', label: 'お支払い方法', icon: CardIcon },
+  { key: 'notifications', label: '通知設定', icon: BellIcon },
+  { key: 'help', label: 'ヘルプ・お問い合わせ', icon: HelpIcon },
 ]
 
 function formatHistoryDate(iso: string) {
@@ -82,8 +89,10 @@ function formatHistoryDate(iso: string) {
 }
 
 export function MyPage() {
+  const navigate = useNavigate()
   const { products, stores, favoriteIds, reservations, getProductById, getStoreById, notifications } = useData()
   const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [openSettingsModal, setOpenSettingsModal] = useState<SettingsKey | null>(null)
   const unreadCount = notifications.filter((notification) => notification.audience === 'user' && !notification.read).length
 
   const validReservations = useMemo(
@@ -119,8 +128,8 @@ export function MyPage() {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-12">
-      <div className="flex items-center justify-between bg-white px-4 pt-6">
-        <span className="flex h-9 w-32 items-center overflow-hidden whitespace-nowrap">
+      <div className="flex items-center justify-between bg-white px-4 pb-2 pt-6">
+        <span className="flex h-[54px] w-48 items-center overflow-hidden whitespace-nowrap">
           <img src={foodRescueLogo} alt="フードレスキュー" className="h-full w-full object-cover object-top" />
         </span>
         <div className="flex items-center gap-4">
@@ -140,13 +149,22 @@ export function MyPage() {
             </button>
             <NotificationPanel audience="user" open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
           </div>
-          <button type="button" aria-label="設定" className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-600 transition-colors hover:bg-neutral-100">
+          <button
+            type="button"
+            aria-label="設定"
+            onClick={() => setOpenSettingsModal('account')}
+            className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-600 transition-colors hover:bg-neutral-100"
+          >
             <SettingsIcon />
           </button>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-b border-neutral-100 bg-white px-4 py-6">
+      <button
+        type="button"
+        onClick={() => setOpenSettingsModal('account')}
+        className="flex w-full items-center justify-between border-b border-neutral-100 bg-white px-4 py-6 text-left active:bg-neutral-50"
+      >
         <div className="flex items-center gap-4">
           <img
             src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=200&q=80"
@@ -162,12 +180,16 @@ export function MyPage() {
           </div>
         </div>
         <ChevronIcon className="h-4 w-4 shrink-0 text-neutral-300" />
-      </div>
+      </button>
 
       <div className="mx-4 mt-4 rounded-2xl bg-[#0B2C24] p-5 text-white">
         <div className="mb-6 flex items-center justify-between">
           <p className="text-xs font-bold uppercase tracking-widest text-neutral-400">あなたのインパクト</p>
-          <button type="button" className="text-xs font-semibold text-white/90 underline decoration-white/30 underline-offset-4">
+          <button
+            type="button"
+            onClick={() => navigate('/history')}
+            className="text-xs font-semibold text-white/90 underline decoration-white/30 underline-offset-4"
+          >
             詳細 ＞
           </button>
         </div>
@@ -251,7 +273,9 @@ export function MyPage() {
       <div className="mx-4 mt-8">
         <div className="mb-4 flex items-center justify-between px-1">
           <p className="text-sm font-bold tracking-tight text-neutral-900">レスキューヒストリー</p>
-          <button type="button" className="text-xs font-semibold text-neutral-400">すべて見る</button>
+          <button type="button" onClick={() => navigate('/history')} className="text-xs font-semibold text-neutral-400">
+            すべて見る
+          </button>
         </div>
 
         {history.length === 0 ? (
@@ -294,7 +318,9 @@ export function MyPage() {
       <div className="mx-4 mt-8">
         <div className="mb-4 flex items-center justify-between px-1">
           <p className="text-sm font-bold tracking-tight text-neutral-900">お気に入り店舗</p>
-          <button type="button" className="text-xs font-semibold text-neutral-400">すべて見る</button>
+          <button type="button" onClick={() => navigate('/favorites')} className="text-xs font-semibold text-neutral-400">
+            すべて見る
+          </button>
         </div>
 
         {favoriteStores.length === 0 ? (
@@ -318,8 +344,9 @@ export function MyPage() {
           const Icon = item.icon
           return (
             <button
-              key={item.label}
+              key={item.key}
               type="button"
+              onClick={() => setOpenSettingsModal(item.key)}
               className="flex w-full items-center justify-between border-b border-neutral-100 px-4 py-4 text-left last:border-none active:bg-neutral-50"
             >
               <span className="flex items-center gap-3 text-sm font-medium text-neutral-900">
@@ -331,6 +358,11 @@ export function MyPage() {
           )
         })}
       </div>
+
+      <AccountModal open={openSettingsModal === 'account'} onClose={() => setOpenSettingsModal(null)} />
+      <PaymentMethodsModal open={openSettingsModal === 'payment'} onClose={() => setOpenSettingsModal(null)} />
+      <NotificationSettingsModal open={openSettingsModal === 'notifications'} onClose={() => setOpenSettingsModal(null)} />
+      <HelpModal open={openSettingsModal === 'help'} onClose={() => setOpenSettingsModal(null)} />
     </div>
   )
 }

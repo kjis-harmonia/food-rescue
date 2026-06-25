@@ -34,6 +34,7 @@ export interface Product {
 }
 
 export type ReservationStatus = 'confirmed' | 'picked_up' | 'cancelled'
+export type PaymentMethod = 'credit_card' | 'paypay' | 'apple_pay'
 
 export interface Reservation {
   id: string

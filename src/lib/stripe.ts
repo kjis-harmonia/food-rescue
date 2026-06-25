@@ -115,6 +115,25 @@ export async function simulateTestModeCharge(card: CardInput, amount: number): P
   }
 }
 
+/**
+ * Simulates a PayPay / Apple Pay charge. Like `simulateTestModeCharge`,
+ * this is a frontend-only simulation — a real Stripe PayPay/Apple Pay
+ * charge requires server-side PaymentIntent creation (secret key), which
+ * would live in a Supabase Edge Function once one exists. Always succeeds;
+ * wallet flows don't have a "declined card number" equivalent to simulate.
+ */
+export async function simulateWalletCharge(method: 'paypay' | 'apple_pay', amount: number): Promise<ChargeResult> {
+  await new Promise((resolve) => window.setTimeout(resolve, 1400))
+
+  void amount
+  const suffix = Math.random().toString(36).slice(2, 11)
+  return {
+    success: true,
+    paymentIntentId: `pi_test_${method}_${suffix}`,
+    chargeId: `ch_test_${method}_${suffix}`,
+  }
+}
+
 function describeValidationError(error: CardValidationError) {
   switch (error) {
     case 'invalid_number':

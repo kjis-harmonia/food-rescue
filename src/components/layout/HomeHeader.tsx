@@ -22,11 +22,11 @@ export function HomeHeader() {
   return (
     <header
       className={[
-        'sticky top-0 z-50 flex items-center justify-between px-4 py-2 transition-all duration-300',
+        'sticky top-0 z-50 flex items-center justify-between px-4 py-1.5 transition-all duration-300',
         isScrolled ? 'border-b border-neutral-100 bg-white/90 backdrop-blur-md' : 'border-b border-neutral-100 bg-white',
       ].join(' ')}
     >
-      <span className="flex h-7 w-7 shrink-0 items-center overflow-hidden rounded-md">
+      <span className="flex h-[42px] w-[42px] shrink-0 items-center overflow-hidden rounded-md">
         <img
           src={foodRescueLogo}
           alt="FOOD RESCUE"
