@@ -1,0 +1,262 @@
+@import 'tailwindcss';
+
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f7f5;
+  --color-text: #1c1f1d;
+  --color-text-muted: #6b7269;
+  --color-border: #e7e9e5;
+  --color-primary: #1b4332;
+  --color-primary-dark: #11301f;
+  --color-primary-soft: #e7efe9;
+  --color-danger: #b3413a;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --shadow-card: 0 1px 2px rgba(20, 24, 21, 0.04), 0 8px 24px rgba(20, 24, 21, 0.06);
+
+  font-family: 'Hiragino Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  color-scheme: light;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    /* Stops the browser's native "pull down to refresh" gesture from
+       firing on vertical overscroll, so it doesn't fight the app's own
+       swipe/scroll interactions inside the mobile-simulated shell. */
+    overscroll-behavior-y: contain;
+  }
+
+  body {
+    background: var(--color-surface-muted);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  a,
+  [role='button'] {
+    /* Removes the ~300ms double-tap-to-zoom delay on touch devices and the
+       gray flash on tap, without disabling pinch-zoom for accessibility. */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: 16px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    margin: 0;
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 0 0 1px var(--color-border);
+}
+
+.app-shell--wide {
+  max-width: 1080px;
+}
+
+.page {
+  padding: 20px;
+  padding-bottom: 96px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 14px;
+  color: var(--color-text);
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+}
+
+.btn:active {
+  transform: scale(0.99);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-primary);
+  padding: 8px 4px;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.tag-muted {
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.field input,
+.field textarea {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 15px;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.field-row .field {
+  flex: 1;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--color-text-muted);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+th {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 720px) {
+  .app-shell {
+    max-width: 100%;
+    box-shadow: none;
+  }
+}

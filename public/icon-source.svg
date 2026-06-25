@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0D4436" />
+  <g fill="none" stroke="#A3E635" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 200 L256 144 L352 200 L352 320 L256 376 L160 320 Z" />
+    <path d="M160 200 L256 256 L352 200" />
+    <path d="M256 256 L256 376" />
+  </g>
+  <text x="256" y="448" font-family="Arial, sans-serif" font-size="56" font-weight="900" fill="#A3E635" text-anchor="middle">FR</text>
+</svg>

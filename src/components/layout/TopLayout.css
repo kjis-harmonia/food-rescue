@@ -1,0 +1,26 @@
+.store-shell { min-height: 100vh; background: #fbfbfa; }
+.store-header { display: flex; height: 70px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8ebe8; background: white; padding: 0 max(20px, calc((100vw - 1160px) / 2)); }
+.store-brand { display: flex; align-items: center; gap: 11px; }
+.store-brand__mark { width: 34px; height: 34px; }
+.store-brand span { display: flex; flex-direction: column; }
+.store-brand strong { color: #0d4436; font-size: 13px; letter-spacing: .07em; }
+.store-brand small { margin-top: 2px; color: #8a9690; font-size: 8px; font-weight: 700; letter-spacing: .14em; }
+.store-header__actions { display: flex; align-items: center; gap: 14px; }
+.store-live { display: flex; align-items: center; gap: 6px; color: #527066; font-size: 10px; font-weight: 700; }
+.store-live i { width: 6px; height: 6px; border-radius: 50%; background: #16a34a; box-shadow: 0 0 0 3px #e9f7ed; }
+.store-exit { color: #6b7280; font-size: 10px; font-weight: 650; }
+.store-avatar { display: grid; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 50%; background: #e8f0ec; color: #0d4436; font-size: 10px; font-weight: 800; }
+.store-nav { position: sticky; z-index: 20; top: 0; border-bottom: 1px solid #e8ebe8; background: rgba(255,255,255,.94); backdrop-filter: blur(14px); }
+.store-nav__inner { display: flex; max-width: 1160px; height: 54px; align-items: center; gap: 8px; margin: 0 auto; padding: 0 4px; }
+.store-nav__item { display: flex; height: 100%; align-items: center; border-bottom: 2px solid transparent; padding: 0 18px; color: #7b8781; font-size: 11px; font-weight: 700; }
+.store-nav__item.is-active { border-bottom-color: #0d4436; color: #0d4436; }
+.store-nav__new { margin-left: auto; border-radius: 13px; background: #0d4436; padding: 10px 16px; color: white; font-size: 10px; font-weight: 750; }
+.store-main { padding: 38px 24px 80px; }
+@media (max-width: 640px) {
+  .store-header { height: 62px; padding: 0 16px; }
+  .store-live, .store-exit { display: none; }
+  .store-nav__inner { padding: 0 10px; overflow-x: auto; }
+  .store-nav__item { padding: 0 12px; white-space: nowrap; }
+  .store-nav__new { white-space: nowrap; }
+  .store-main { padding: 28px 16px 65px; }
+}
