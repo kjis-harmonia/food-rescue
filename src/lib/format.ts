@@ -30,6 +30,16 @@ export function minutesUntilTime(timeStr: string) {
   return diff
 }
 
+/** Seconds remaining until `timeStr` ("HH:MM") today, wrapping to tomorrow if passed. */
+export function secondsUntilTime(timeStr: string): number {
+  const [hours, minutes] = timeStr.split(':').map(Number)
+  const end = new Date()
+  end.setHours(hours, minutes, 0, 0)
+  let diff = Math.floor((end.getTime() - Date.now()) / 1000)
+  if (diff < 0) diff += 24 * 60 * 60
+  return diff
+}
+
 export function formatCountdown(minutesLeft: number) {
   if (minutesLeft <= 0) return 'まもなく終了'
   if (minutesLeft < 60) return `あと${minutesLeft}分`

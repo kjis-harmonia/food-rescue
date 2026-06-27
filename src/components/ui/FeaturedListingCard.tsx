@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
+import { LiveCountdown } from './LiveCountdown'
 import { useData } from '../../context/DataContext'
-import { formatCountdown, formatDistance, formatYen, minutesUntilTime } from '../../lib/format'
+import { formatDistance, formatYen } from '../../lib/format'
 import type { Product } from '../../lib/types'
 
 export function FeaturedListingCard({ product }: { product: Product }) {
@@ -9,8 +10,6 @@ export function FeaturedListingCard({ product }: { product: Product }) {
   const savings = product.normalPrice - product.rescuePrice
   const displayTitle = product.surpriseBag ? `${store?.name ?? ''}のお楽しみレスキューバッグ` : product.title
 
-  const countdownLabel = formatCountdown(minutesUntilTime(product.pickupEnd))
-
   return (
     <Link
       to={`/products/${product.id}`}
@@ -18,8 +17,8 @@ export function FeaturedListingCard({ product }: { product: Product }) {
     >
       <div className="relative">
         <img src={product.image} alt={displayTitle} className="aspect-[16/10] w-full object-cover" />
-        <span className="absolute left-3 top-3 animate-pulse rounded-full bg-red-600 px-3 py-1 text-xs font-black text-white">
-          🔥 {countdownLabel}
+        <span className="absolute left-3 top-3">
+          <LiveCountdown pickupEnd={product.pickupEnd} variant="featured" />
         </span>
         <span className="absolute right-3 top-3 rounded-full bg-neutral-900/80 px-2.5 py-1 text-[11px] font-black text-white backdrop-blur-sm">
           残り{product.quantityLeft}個

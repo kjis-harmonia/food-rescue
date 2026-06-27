@@ -109,6 +109,29 @@ export function MyPage() {
   const gamification = useUserGamification()
   const { co2SavedKg, treesEquivalent, level, badges } = gamification
 
+  // Monthly rescue count
+  const currentMonth = new Date().getMonth()
+  const thisMonthMeals = useMemo(
+    () =>
+      validReservations
+        .filter((r) => new Date(r.createdAt).getMonth() === currentMonth)
+        .reduce((sum, r) => sum + r.quantity, 0),
+    [validReservations, currentMonth],
+  )
+  const thisMonthCo2 = +(thisMonthMeals * 0.42).toFixed(1)
+
+  // Streak: count consecutive days backwards from today that have a reservation
+  const streak = useMemo(() => {
+    const days = new Set(validReservations.map((r) => new Date(r.createdAt).toDateString()))
+    let count = 0
+    const d = new Date()
+    while (days.has(d.toDateString())) {
+      count++
+      d.setDate(d.getDate() - 1)
+    }
+    return count
+  }, [validReservations])
+
   const lastReservation = validReservations[0]
   const lastProduct = lastReservation ? getProductById(lastReservation.productId) : undefined
   const lastSavings = lastReservation && lastProduct ? (lastProduct.normalPrice - lastProduct.rescuePrice) * lastReservation.quantity : 0
@@ -129,9 +152,7 @@ export function MyPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-12">
       <div className="flex items-center justify-between bg-white px-4 pb-2 pt-6">
-        <span className="flex h-[54px] w-48 items-center overflow-hidden whitespace-nowrap">
-          <img src={foodRescueLogo} alt="フードレスキュー" className="h-full w-full object-cover object-top" />
-        </span>
+        <img src={foodRescueLogo} alt="フードレスキュー" className="h-9 w-auto object-contain" />
         <div className="flex items-center gap-4">
           <div className="relative">
             <button
@@ -243,6 +264,50 @@ export function MyPage() {
         <p className="mt-2 text-[11px] font-medium text-neutral-400">
           次のレベルまであと {(level.xpForNextLevel - level.xpIntoLevel).toLocaleString('ja-JP')} XP
         </p>
+      </div>
+
+      {/* ── Streak & monthly stats ── */}
+      <div className="mx-4 mt-4 overflow-hidden rounded-2xl">
+        {/* Streak banner */}
+        <div className={[
+          'flex items-center gap-4 p-4',
+          streak > 0
+            ? 'bg-gradient-to-r from-orange-500 to-red-500'
+            : 'bg-gradient-to-r from-neutral-400 to-neutral-500',
+        ].join(' ')}>
+          <span className="text-4xl leading-none">{streak > 0 ? '🔥' : '💤'}</span>
+          <div>
+            {streak > 0 ? (
+              <>
+                <p className="text-lg font-black text-white">{streak}日連続レスキュー中！</p>
+                <p className="text-xs text-white/80">明日もレスキューしてストリークを守ろう</p>
+              </>
+            ) : (
+              <>
+                <p className="text-base font-black text-white">ストリークがまだありません</p>
+                <p className="text-xs text-white/80">今日レスキューして記録を始めよう！</p>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Monthly stats */}
+        <div className="grid grid-cols-2 gap-3 bg-white p-4">
+          <div className="rounded-xl bg-[#F0F9F4] p-3 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-[#0D4436]/60">今月のレスキュー</p>
+            <p className="mt-1 text-2xl font-black text-[#0D4436]">
+              {thisMonthMeals}<span className="ml-0.5 text-sm font-normal">食</span>
+            </p>
+            <p className="mt-0.5 text-[10px] text-neutral-500">CO₂ {thisMonthCo2}kg削減 ≈ 木1本</p>
+          </div>
+          <div className="rounded-xl bg-orange-50 p-3 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-wide text-orange-600/70">最長ストリーク</p>
+            <p className="mt-1 text-2xl font-black text-orange-500">
+              {Math.max(streak, 1)}<span className="ml-0.5 text-sm font-normal">日</span>
+            </p>
+            <p className="mt-0.5 text-[10px] text-neutral-500">今日も続けてトップを目指そう</p>
+          </div>
+        </div>
       </div>
 
       <div className="mx-4 mt-8">
