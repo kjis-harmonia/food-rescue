@@ -87,10 +87,6 @@ const methodOptions: { key: PaymentMethod; label: string }[] = [
   { key: 'apple_pay', label: 'Apple Pay' },
 ]
 
-const walletLabel: Record<'paypay' | 'apple_pay', string> = {
-  paypay: 'PayPay',
-  apple_pay: 'Apple Pay',
-}
 
 const walletProcessingLabel: Record<'paypay' | 'apple_pay', string> = {
   paypay: 'PayPayアプリを起動中...',
