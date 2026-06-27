@@ -17,6 +17,37 @@ function SearchIcon() {
   )
 }
 
+function MissionStats({ rescuableCount }: { rescuableCount: number }) {
+  return (
+    <div className="mx-4 mt-4 overflow-hidden rounded-2xl bg-gradient-to-br from-[#0D4436] via-[#0F5040] to-[#1A6B52] shadow-[0_4px_20px_rgba(13,68,54,0.28)]">
+      <div className="p-4">
+        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/50">本日の実績 — LIVE</p>
+        <div className="mt-2.5 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-base">🌍</span>
+            <div>
+              <p className="text-[11px] text-white/60 font-medium">今日救われた食品</p>
+              <p className="text-sm font-black tracking-tight text-white">
+                <span className="text-[#B4E36A] text-base">42.5 kg</span> の廃棄を防ぎました
+              </p>
+            </div>
+          </div>
+          <div className="h-px bg-white/10" />
+          <div className="flex items-center gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-base">📍</span>
+            <div>
+              <p className="text-[11px] text-white/60 font-medium">広島エリア・今すぐレスキュー可能</p>
+              <p className="text-sm font-black tracking-tight text-white">
+                あと <span className="text-[#B4E36A] text-base">{rescuableCount} 食</span> 救えます
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function HorizontalRail({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
@@ -56,6 +87,10 @@ export function Home() {
   )
 
   const popularStores = useMemo(() => [...stores].sort((a, b) => b.rating - a.rating), [stores])
+  const rescuableCount = useMemo(
+    () => allActiveProducts.reduce((sum, p) => sum + p.quantityLeft, 0),
+    [allActiveProducts],
+  )
 
   const recommended = useMemo(
     () => [...allActiveProducts].sort((a, b) => b.normalPrice - b.rescuePrice - (a.normalPrice - a.rescuePrice)),
@@ -75,6 +110,8 @@ export function Home() {
           <span>エリアやお店を探す</span>
         </Link>
       </div>
+
+      <MissionStats rescuableCount={rescuableCount} />
 
       <div className="mt-5">
         <CategoryTabs active={activeCategory} onChange={setActiveCategory} />

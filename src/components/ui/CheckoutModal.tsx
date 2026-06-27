@@ -34,15 +34,6 @@ function IconCard({ className }: { className?: string }) {
   )
 }
 
-function IconPayPayBadge({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="16" height="16" rx="4" fill="#FF0033" />
-      <text x="4" y="12.5" fontFamily="'Helvetica Neue', Arial, sans-serif" fontWeight="900" fontSize="10" fill="white">P</text>
-    </svg>
-  )
-}
-
 function IconApple({ className, color = 'currentColor' }: { className?: string; color?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill={color} xmlns="http://www.w3.org/2000/svg">
@@ -51,16 +42,29 @@ function IconApple({ className, color = 'currentColor' }: { className?: string; 
   )
 }
 
-// PayPay large wordmark (center panel)
-function PayPayWordmark() {
+// Google "G" colorful logo
+function IconGoogleG({ className }: { className?: string }) {
   return (
-    <div
-      className="select-none text-[2.75rem] font-black leading-none tracking-tight text-[#FF0033]"
-      style={{ fontFamily: "'Helvetica Neue', 'Arial Black', Arial, sans-serif", letterSpacing: '-0.04em' }}
-      aria-label="PayPay"
-    >
-      PayPay
-    </div>
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+    </svg>
+  )
+}
+
+// Google Pay tab badge (14px icon)
+function IconGooglePayBadge({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="16" height="16" rx="4" fill="white" />
+      <rect width="16" height="16" rx="4" stroke="#E0E0E0" strokeWidth="0.75" />
+      <path d="M13.28 8.15c0-.47-.04-.92-.12-1.35H8v2.55h2.96c-.13.82-.62 1.52-1.33 1.99v1.66h2.14c1.25-1.15 1.97-2.84 1.97-4.85z" fill="#4285F4" />
+      <path d="M8 14c1.48 0 2.73-.49 3.63-1.33l-2.14-1.66c-.59.4-1.34.63-1.49.63-1.72 0-3.18-1.16-3.7-2.72H2.1v1.71C3 12.73 5.3 14 8 14z" fill="#34A853" />
+      <path d="M4.3 9.5c-.13-.4-.21-.82-.21-1.25 0-.44.08-.86.21-1.25V5.29H2.1C1.6 6.21 1.3 7.07 1.3 8s.3 1.79.8 2.71L4.3 9.5z" fill="#FBBC05" />
+      <path d="M8 4.28c.97 0 1.84.33 2.52.99l1.89-1.89C11.27 2.25 9.78 1.6 8 1.6 5.3 1.6 3 2.87 2.1 4.71l2.2 1.71C4.82 5.24 6.28 4.28 8 4.28z" fill="#EA4335" />
+    </svg>
   )
 }
 
@@ -79,18 +83,32 @@ function ApplePayMark() {
   )
 }
 
+// Google Pay mark (center panel)
+function GooglePayMark() {
+  return (
+    <div className="flex items-center gap-3">
+      <IconGoogleG className="h-11 w-11" />
+      <span
+        className="text-[2.2rem] font-light tracking-tight text-neutral-700"
+        style={{ fontFamily: "'Google Sans', 'Roboto', Arial, sans-serif", fontWeight: 300 }}
+      >
+        Pay
+      </span>
+    </div>
+  )
+}
+
 // ── Tab options ──────────────────────────────────────────────────────────────
 
 const methodOptions: { key: PaymentMethod; label: string }[] = [
   { key: 'credit_card', label: 'カード' },
-  { key: 'paypay', label: 'PayPay' },
   { key: 'apple_pay', label: 'Apple Pay' },
+  { key: 'google_pay', label: 'Google Pay' },
 ]
 
-
-const walletProcessingLabel: Record<'paypay' | 'apple_pay', string> = {
-  paypay: 'PayPayアプリを起動中...',
+const walletProcessingLabel: Record<'apple_pay' | 'google_pay', string> = {
   apple_pay: 'Apple Payで認証中...',
+  google_pay: 'Google Payで認証中...',
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -195,15 +213,9 @@ export function CheckoutModal({ open, amount, onClose, onSuccess }: CheckoutModa
                         : 'text-neutral-500 hover:text-neutral-700',
                     ].join(' ')}
                   >
-                    {opt.key === 'credit_card' && (
-                      <IconCard className="h-3.5 w-3.5 shrink-0" />
-                    )}
-                    {opt.key === 'paypay' && (
-                      <IconPayPayBadge className="h-3.5 w-3.5 shrink-0" />
-                    )}
-                    {opt.key === 'apple_pay' && (
-                      <IconApple className="h-3.5 w-3.5 shrink-0" />
-                    )}
+                    {opt.key === 'credit_card' && <IconCard className="h-3.5 w-3.5 shrink-0" />}
+                    {opt.key === 'apple_pay' && <IconApple className="h-3.5 w-3.5 shrink-0" />}
+                    {opt.key === 'google_pay' && <IconGooglePayBadge className="h-3.5 w-3.5 shrink-0" />}
                     <span className="leading-none">{opt.label}</span>
                   </button>
                 )
@@ -271,27 +283,7 @@ export function CheckoutModal({ open, amount, onClose, onSuccess }: CheckoutModa
                     / 任意の未来の有効期限 / 任意の3桁のCVCでお試しください。
                   </p>
                 </motion.div>
-              ) : method === 'paypay' ? (
-                <motion.div
-                  key="paypay"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.16 }}
-                >
-                  {/* PayPay premium panel */}
-                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FFF4F4] via-white to-[#FFF9F0] py-9 text-center shadow-[inset_0_0_0_1px_rgba(255,0,51,0.10)]">
-                    {/* Ambient glow */}
-                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_70%_0%,rgba(255,0,51,0.07),transparent)]" />
-                    <div className="relative flex flex-col items-center gap-2.5">
-                      <PayPayWordmark />
-                      <p className="text-[11px] font-medium tracking-wide text-neutral-400">
-                        テストモード — 課金は発生しません
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
+              ) : method === 'apple_pay' ? (
                 <motion.div
                   key="apple_pay"
                   initial={{ opacity: 0, y: 6 }}
@@ -301,11 +293,29 @@ export function CheckoutModal({ open, amount, onClose, onSuccess }: CheckoutModa
                 >
                   {/* Apple Pay premium dark panel */}
                   <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#232323] to-[#141414] py-9 text-center shadow-[inset_0_0_0_1px_rgba(255,255,255,0.07),0_2px_16px_rgba(0,0,0,0.3)]">
-                    {/* Subtle sheen */}
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_30%_0%,rgba(255,255,255,0.05),transparent)]" />
                     <div className="relative flex flex-col items-center gap-2.5">
                       <ApplePayMark />
                       <p className="text-[11px] font-medium tracking-wide text-white/35">
+                        テストモード — 課金は発生しません
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="google_pay"
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.16 }}
+                >
+                  {/* Google Pay clean light panel */}
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#F8FBFF] to-[#EEF4FF] py-9 text-center shadow-[inset_0_0_0_1px_rgba(26,115,232,0.12)]">
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_70%_0%,rgba(26,115,232,0.05),transparent)]" />
+                    <div className="relative flex flex-col items-center gap-2.5">
+                      <GooglePayMark />
+                      <p className="text-[11px] font-medium tracking-wide text-neutral-400">
                         テストモード — 課金は発生しません
                       </p>
                     </div>
@@ -338,9 +348,9 @@ export function CheckoutModal({ open, amount, onClose, onSuccess }: CheckoutModa
                 'mt-4 flex w-full items-center justify-center gap-2.5 rounded-2xl py-[15px] text-[13px] font-black tracking-tight transition-all duration-200 disabled:opacity-55 active:scale-[0.98]',
                 method === 'credit_card'
                   ? 'bg-gradient-to-b from-[#0E5443] to-[#093D30] text-white shadow-[0_4px_16px_rgba(13,68,54,0.38),inset_0_1px_0_rgba(255,255,255,0.12)]'
-                  : method === 'paypay'
-                  ? 'bg-gradient-to-b from-[#D4A520] via-[#C49510] to-[#B08408] text-white shadow-[0_4px_16px_rgba(180,130,8,0.45),inset_0_1px_0_rgba(255,255,255,0.18)]'
-                  : 'bg-gradient-to-b from-[#2C2C2E] to-[#111111] text-white shadow-[0_4px_18px_rgba(0,0,0,0.48),inset_0_1px_0_rgba(255,255,255,0.09)]',
+                  : method === 'apple_pay'
+                  ? 'bg-gradient-to-b from-[#2C2C2E] to-[#111111] text-white shadow-[0_4px_18px_rgba(0,0,0,0.48),inset_0_1px_0_rgba(255,255,255,0.09)]'
+                  : 'bg-gradient-to-b from-[#1A73E8] to-[#1557B0] text-white shadow-[0_4px_16px_rgba(26,115,232,0.42),inset_0_1px_0_rgba(255,255,255,0.18)]',
               ].join(' ')}
             >
               {isProcessing ? (
@@ -352,15 +362,14 @@ export function CheckoutModal({ open, amount, onClose, onSuccess }: CheckoutModa
                 </>
               ) : method === 'credit_card' ? (
                 <span>{formatYen(amount)} を支払う</span>
-              ) : method === 'paypay' ? (
-                <span>
-                  <span className="opacity-80">PayPayで</span>
-                  {'  '}
-                  {formatYen(amount)} を支払う
+              ) : method === 'apple_pay' ? (
+                <span className="flex items-center gap-2">
+                  <IconApple className="h-[1.1rem] w-auto" color="white" />
+                  <span>Pay で {formatYen(amount)} を支払う</span>
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  <IconApple className="h-[1.1rem] w-auto" color="white" />
+                  <IconGoogleG className="h-4 w-4" />
                   <span>Pay で {formatYen(amount)} を支払う</span>
                 </span>
               )}

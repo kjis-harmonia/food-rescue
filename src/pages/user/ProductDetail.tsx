@@ -279,6 +279,24 @@ export function ProductDetail() {
         )}
       </div>
 
+      {/* ── Eco impact indicator ── */}
+      <div className="mx-5 mb-4 mt-2 overflow-hidden rounded-2xl bg-gradient-to-br from-[#E8F5EE] to-[#EFF9EE] shadow-[inset_0_0_0_1px_rgba(13,68,54,0.10)]">
+        <div className="flex items-stretch">
+          <div className="flex flex-1 flex-col items-center justify-center gap-0.5 border-r border-[#0D4436]/10 py-3.5 text-center">
+            <span className="text-lg">🌱</span>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-[#0D4436]/60">CO₂ 削減</p>
+            <p className="text-base font-black tracking-tighter text-[#0D4436]">
+              {((product.normalPrice / 1000) * 0.48 * quantity).toFixed(1)} kg
+            </p>
+          </div>
+          <div className="flex flex-1 flex-col items-center justify-center gap-0.5 py-3.5 text-center">
+            <span className="text-lg">🍽️</span>
+            <p className="text-[10px] font-bold uppercase tracking-wide text-[#0D4436]/60">食品ロス削減</p>
+            <p className="text-base font-black tracking-tighter text-[#0D4436]">{quantity} 食分 救済</p>
+          </div>
+        </div>
+      </div>
+
       <div className="fixed bottom-0 left-0 right-0 z-40 mx-auto flex h-[72px] max-w-[480px] items-center border-t border-neutral-100 bg-white/80 px-5 backdrop-blur-md [padding-bottom:env(safe-area-inset-bottom)]">
         <motion.button
           type="button"
