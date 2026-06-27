@@ -32,12 +32,14 @@ export function FeaturedListingCard({ product }: { product: Product }) {
         <p className="mt-0.5 line-clamp-1 text-base font-bold text-neutral-900">{displayTitle}</p>
         <p className="mt-0.5 text-xs text-neutral-400">受取 {product.pickupStart}〜{product.pickupEnd}</p>
 
-        <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <div className="mt-2 flex flex-col gap-0.5">
           <span className="text-2xl font-black tracking-tight text-neutral-950">{formatYen(product.rescuePrice)}</span>
-          <span className="text-sm text-neutral-400 line-through">{formatYen(product.normalPrice)}</span>
-          <span className="shrink-0 whitespace-nowrap rounded-md bg-[#0D4436] px-2 py-1 text-xs font-black text-white">
-            {formatYen(savings)}お得
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-neutral-400 line-through">{formatYen(product.normalPrice)}</span>
+            <span className="whitespace-nowrap rounded-md bg-[#0D4436] px-2 py-0.5 text-xs font-black text-white">
+              {formatYen(savings)}お得
+            </span>
+          </div>
         </div>
       </div>
     </Link>
