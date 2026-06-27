@@ -47,11 +47,11 @@ export function ListingCard({ product }: { product: Product }) {
       <p className="text-sm font-bold text-neutral-800 line-clamp-1 mt-0.5">{displayTitle}</p>
       <p className="text-[11px] text-neutral-400 mt-0.5">受取 {product.pickupStart}〜{product.pickupEnd}</p>
 
-      <div className="flex items-baseline gap-2 mt-1">
+      <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="text-base font-black text-neutral-950">{formatYen(product.rescuePrice)}</span>
         <span className="text-xs text-neutral-400 line-through">{formatYen(product.normalPrice)}</span>
         {!isSoldOut && (
-          <span className="rounded-md bg-[#0D4436] px-1.5 py-0.5 text-[10px] font-black text-white">
+          <span className="shrink-0 whitespace-nowrap rounded-md bg-[#0D4436] px-1.5 py-0.5 text-[10px] font-black text-white">
             {formatYen(savings)}お得
           </span>
         )}
