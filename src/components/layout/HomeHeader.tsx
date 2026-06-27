@@ -26,13 +26,11 @@ export function HomeHeader() {
         isScrolled ? 'border-b border-neutral-100 bg-white/90 backdrop-blur-md' : 'border-b border-neutral-100 bg-white',
       ].join(' ')}
     >
-      <span className="flex h-[54px] w-[54px] shrink-0 items-center overflow-hidden rounded-xl shadow-sm">
-        <img
-          src={foodRescueLogo}
-          alt="FOOD RESCUE"
-          className="h-full w-full object-cover object-left-top"
-        />
-      </span>
+      <img
+        src={foodRescueLogo}
+        alt="FOOD RESCUE"
+        className="h-9 w-auto shrink-0 object-contain"
+      />
       <button type="button" className="flex shrink-0 items-center gap-0.5 whitespace-nowrap text-[11px] font-semibold text-neutral-600">
         現在地 広島市中区
         <ChevronDownIcon />
